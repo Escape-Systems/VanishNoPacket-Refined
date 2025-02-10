@@ -33,7 +33,7 @@ jobs:
       uses: actions/upload-artifact@v4.6.0
       with:
         name: plugin 
-        path: /target/VanishNoPacket.jar
+        path: target/VanishNoPacket.jar
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
