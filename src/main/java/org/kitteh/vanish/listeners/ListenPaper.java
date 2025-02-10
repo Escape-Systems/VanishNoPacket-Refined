@@ -27,6 +27,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
@@ -68,8 +69,8 @@ public final class ListenPaper implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onProjectileCollide(@NonNull ProjectileCollideEvent event) {
-        if ((event.getCollidedWith() instanceof Player player) && this.plugin.getManager().isVanished(player)) {
+    public void onProjectileCollide(@NonNull ProjectileHitEvent event) {
+        if ((event.getHitEntity() instanceof Player player) && this.plugin.getManager().isVanished(player)) {
             event.setCancelled(true);
         }
     }
