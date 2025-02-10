@@ -103,8 +103,8 @@ public final class VanishManager {
         this.announceManipulator = new VanishAnnounceManipulator(this.plugin);
 
         this.showPlayer = new ShowPlayerHandler(this.plugin);
-        this.plugin.getServer().getScheduler().scheduleSyncRepeatingTask(this.plugin, this.showPlayer, 4, 4);
 
+        this.plugin.getServer().getGlobalRegionScheduler().runAtFixedRate(this.plugin, (ignored) -> this.showPlayer.run(),4, 4);
         this.vanishCollideState = new NamespacedKey(this.plugin, "collidable");
 
         this.plugin.getServer().getMessenger().registerIncomingPluginChannel(this.plugin, VanishManager.VANISH_PLUGIN_CHANNEL, (channel, player, message) -> {
