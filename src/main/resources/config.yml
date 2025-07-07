@@ -7,9 +7,9 @@
 #  https://dev.bukkit.org/projects/vanish/pages/configuration
 #
 fakeannounce:
-    automaticforsilentjoin: false
-    join: '%p joined the game.'
-    quit: '%p left the game.'
+    automaticforsilentjoin: true
+#    join: '%p joined the game.'
+#    quit: '%p left the game.'
 hooks:
     essentials: false
     dynmap: false
