@@ -46,7 +46,7 @@ jobs:
           sha_short=$(git rev-parse --short HEAD)
           version=$(ls target/VanishNoPacket-*.jar | grep -o '[[:digit:]]\+\.[[:digit:]]\+')
           gh release create --draft "$sha_short" --title "$version: $sha_short"
-          gh release upload "$sha_short" target/$(ls target/VanishNoPacket-*.jar)
+          gh release upload "$sha_short" $(ls target/VanishNoPacket-*.jar)
           gh release edit "$sha_short" --draft=false
 
 
