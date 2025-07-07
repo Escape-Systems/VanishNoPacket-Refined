@@ -47,7 +47,7 @@ public final class ListenPlayerJoin implements Listener {
         this.plugin.hooksJoin(event.getPlayer());
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.MONITOR  )
     public void onPlayerJoinLate(@NonNull PlayerJoinEvent event) {
         final StringBuilder statusUpdate = new StringBuilder();
         if (VanishPerms.joinVanished(event.getPlayer())) {
