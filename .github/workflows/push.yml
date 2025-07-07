@@ -1,0 +1,58 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: On Push
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+      - name: Build with Maven
+        run: mvn -B -P release package --file pom.xml
+
+  upload:
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    permissions:
+      contents: write
+    steps:
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v4.6.0
+        with:
+          name: plugin
+          path: target/VanishNoPacket-*.jar
+      # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
+      - name: Update dependency graph
+        uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
+      - name: Create Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+
+        run: |
+          sha_short=$(git rev-parse --short HEAD)
+          version=$(ls target/VanishNoPacket-*.jar | grep -o '[[:digit:]]\+\.[[:digit:]]\+')
+          gh release create --draft "$sha_short" --title "$version: $sha_short"
+          gh release upload "$sha_short" target/$(ls target/VanishNoPacket-*.jar)
+          gh release edit "$sha_short" --draft=false
+
+

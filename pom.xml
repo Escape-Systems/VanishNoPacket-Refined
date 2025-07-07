@@ -125,7 +125,7 @@
     </dependencies>
 
     <build>
-        <finalName>${project.artifactId}</finalName>
+        <finalName>${project.artifactId}-${project.version}</finalName>
         <directory>target</directory>
         <resources>
             <resource>
