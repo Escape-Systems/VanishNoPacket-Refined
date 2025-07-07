@@ -1,10 +1,10 @@
-VanishNoPacket  
-by Matt Baxter
+VanishNoPacket-Refined is a fork of VanishNoPacket by Matt Baxter (@mbax). 
+Mainly focusing on modernization and Folia support.
   
-[![](https://jitpack.io/v/mbax/VanishNoPacket.svg)](https://jitpack.io/#mbax/VanishNoPacket)  
-  
-For instructions on using this plugin  
- and to download stable, compiled releases, visit  
+For instructions on using this plugin
 http://dev.bukkit.org/projects/vanish/
-  
-First released Aug 17, 2011
+
+Compiled builds are available in the releases tab.
+[![On Push](https://github.com/Escape-Systems/VanishNoPacket-Folia/actions/workflows/push.yml/badge.svg)](https://github.com/Escape-Systems/VanishNoPacket-Folia/actions/workflows/push.yml)
+
+
