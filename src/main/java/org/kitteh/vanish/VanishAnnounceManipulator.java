@@ -103,7 +103,7 @@ public final class VanishAnnounceManipulator {
   void fakeQuit(@NonNull Player player, boolean force) {
     if (force || !(this.playerOnlineStatus.containsKey(player.getName())
         && !this.playerOnlineStatus.get(player.getName()))) {
-      this.plugin.getServer().broadcast(Component.translatable("multiplayer.player.quit")
+      this.plugin.getServer().broadcast(Component.translatable("multiplayer.player.left")
           .arguments(Component.text(player.getName())).color(TextColor.color(0xFFFF55)));
       this.plugin.getLogger().info(player.getName() + " faked quitting");
       this.playerOnlineStatus.put(player.getName(), false);
