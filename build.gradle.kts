@@ -14,7 +14,6 @@ repositories {
     mavenLocal()
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://repo.essentialsx.net/releases/")
-    maven("https://repo.mikeprimm.com/")
     maven("https://repo.helpch.at/releases")
     maven("https://nexus.scarsz.me/content/groups/public/")
     maven("https://repo.maven.apache.org/maven2/")
@@ -25,7 +24,6 @@ dependencies {
 
 //    testImplementation(libs.junit.junit)
     paperweight.paperDevBundle("1.21.4-R0.1-SNAPSHOT")
-    compileOnly("us.dynmap:DynmapCoreAPI:3.7-beta-6")
     implementation("net.essentialsx:EssentialsX:2.21.1") {
         exclude("org.spigotmc")
     }
