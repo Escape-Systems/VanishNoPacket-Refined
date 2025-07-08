@@ -23,7 +23,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.kitteh.vanish.Debuggle;
 import org.kitteh.vanish.VanishPlugin;
 import org.kitteh.vanish.hooks.plugins.DiscordSRVHook;
-import org.kitteh.vanish.hooks.plugins.DynmapHook;
 import org.kitteh.vanish.hooks.plugins.EssentialsHook;
 import org.kitteh.vanish.hooks.plugins.SquaremapHook;
 import org.kitteh.vanish.hooks.plugins.VaultHook;
@@ -35,7 +34,6 @@ import java.util.Map;
 
 public final class HookManager {
     public enum HookType {
-        Dynmap(DynmapHook.class),
         Essentials(EssentialsHook.class),
         Vault(VaultHook.class),
         DiscordSRV(DiscordSRVHook.class),

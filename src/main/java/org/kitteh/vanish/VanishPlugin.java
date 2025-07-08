@@ -265,9 +265,6 @@ public final class VanishPlugin extends JavaPlugin implements Listener {
     if (this.getConfig().getBoolean("hooks.essentials", false)) {
       this.hookManager.getHook(HookType.Essentials).onEnable();
     }
-    if (this.getConfig().getBoolean("hooks.dynmap", false)) {
-      this.hookManager.getHook(HookType.Dynmap).onEnable();
-    }
     if (this.getConfig().getBoolean("hooks.discordsrv", false) && this.getServer()
         .getPluginManager().isPluginEnabled("DiscordSRV")) {
       // Shouldn't happen here, but if the load order gets broken...
