@@ -31,7 +31,7 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
-import org.spigotmc.event.entity.EntityMountEvent;
+import org.bukkit.event.entity.EntityMountEvent;
 
 public final class ListenPaper implements Listener {
     private final VanishPlugin plugin;
