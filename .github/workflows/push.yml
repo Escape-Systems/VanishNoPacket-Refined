@@ -26,17 +26,16 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-          cache: maven
-      - name: Build with Maven
-        run: mvn -B -P release package --file pom.xml
+          cache: gradle
+      - name: Build with Gradle
+        run: ./gradlew shadowJar
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4.6.0
         with:
           name: plugin
-          path: target/VanishNoPacket-*.jar
-      # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
-      - name: Update dependency graph
-        uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
+          path: build/libs/VanishNoPacket-*.jar
+      - name: Generate and submit dependency graph
+        uses: gradle/actions/dependency-submission@v4
       - name: Create Release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -44,9 +43,7 @@ jobs:
 
         run: |
           sha_short=$(git rev-parse --short HEAD)
-          version=$(ls target/VanishNoPacket-*.jar | grep -o '[[:digit:]]\+\.[[:digit:]]\+')
+          version=$(ls build/libs/VanishNoPacket-*.jar | grep -o '[[:digit:]]\+\.[[:digit:]]\+')
           gh release create --draft "v$version+$sha_short" --title "$version: $sha_short"
-          gh release upload "v$version+$sha_short" $(ls target/VanishNoPacket-*.jar)
+          gh release upload "v$version+$sha_short" $(ls build/libs/VanishNoPacket-*.jar)
           gh release edit "v$version+$sha_short" --draft=false
-
-
