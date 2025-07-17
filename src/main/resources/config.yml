@@ -8,15 +8,16 @@
 #
 fakeannounce:
     automaticforsilentjoin: true
-#    join: '%p joined the game.'
-#    quit: '%p left the game.'
+
 hooks:
     essentials: false
     dynmap: false
     discordsrv: false
     squaremap: false
+
 permissionsupdates:
     checkonworldchange: false
+
 effects:
     lightning:
         count: 30
@@ -27,5 +28,6 @@ double-sneak-during-vanish-switches-gamemode:
     enabled: false
     max-ms-time-between-sneaks: 500
     message: '&aGameMode changed!'
+
 configVersionDoNotTouch: 
     SeriouslyThisWillEraseYourConfig: 9
