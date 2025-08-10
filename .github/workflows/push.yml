@@ -40,7 +40,6 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
-
         run: |
           sha_short=$(git rev-parse --short HEAD)
           version=$(ls build/libs/VanishNoPacket-*.jar | grep -o '[[:digit:]]\+\.[[:digit:]]\+')
