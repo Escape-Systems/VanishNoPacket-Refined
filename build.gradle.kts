@@ -8,6 +8,7 @@ description = "VanishNoPacket-Refined"
 plugins {
     `java-library`
     `maven-publish`
+    idea
     id("io.papermc.paperweight.userdev") version "2.0.0-beta.17"
     id("xyz.jpenilla.run-paper") version "2.3.1"
     id("xyz.jpenilla.resource-factory-paper-convention") version "1.3.0"
