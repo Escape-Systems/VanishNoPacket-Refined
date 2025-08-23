@@ -28,15 +28,19 @@ repositories {
 dependencies {
 
     testImplementation("junit:junit:4.13.2")
-    paperweight.paperDevBundle("1.21.4-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("1.21.8-R0.1-SNAPSHOT")
     implementation("net.essentialsx:EssentialsX:2.21.1") {
         exclude("org.spigotmc")
     }
     compileOnly("com.github.milkbowl:vaultapi:1.7") {
         exclude("org.bukkit")
     }
-    implementation("me.clip:placeholderapi:2.11.6")
-    compileOnly("com.discordsrv:discordsrv:1.29.0")
+    implementation("me.clip:placeholderapi:2.11.6") {
+        exclude("me.clip.placeholderapi.libs.kyori")
+    }
+    compileOnly("com.discordsrv:discordsrv:1.29.0") {
+        exclude("github.scarsz.discordsrv.dependencies.kyori")
+    }
     compileOnly("xyz.jpenilla:squaremap-api:1.3.7")
 }
 
@@ -69,6 +73,7 @@ paperPluginYaml {
     apiVersion = "1.21.4"
     version = project.version.toString()
     description = "Vanish for the high speed admin"
+    foliaSupported = true
 
     dependencies {
         server("Essentials", PaperPluginYaml.Load.OMIT, false)

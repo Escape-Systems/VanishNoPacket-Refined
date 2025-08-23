@@ -20,19 +20,17 @@ package org.kitteh.vanish;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.metadata.LazyMetadataValue;
 import org.bukkit.metadata.LazyMetadataValue.CacheStrategy;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
 import org.kitteh.vanish.hooks.HookManager;
 import org.kitteh.vanish.hooks.HookManager.HookType;
 import org.kitteh.vanish.listeners.ListenEntity;
@@ -91,7 +89,7 @@ public final class VanishPlugin extends JavaPlugin implements Listener {
    * @return version of VanishNoPacket in use
    */
   public @NonNull String getCurrentVersion() {
-    return this.getDescription().getVersion();
+    return this.getPluginMeta().getVersion();
   }
 
   /**
@@ -99,6 +97,7 @@ public final class VanishPlugin extends JavaPlugin implements Listener {
    *
    * @return the hook manager
    */
+  @SuppressWarnings("unused")
   public @NonNull HookManager getHookManager() {
     return this.hookManager;
   }
@@ -184,7 +183,7 @@ public final class VanishPlugin extends JavaPlugin implements Listener {
    */
   public void messageStatusUpdate(@NonNull String message, @Nullable Player avoid) {
     for (final Player player : this.getServer().getOnlinePlayers()) {
-      if ((player != null) && !player.equals(avoid) && VanishPerms.canSeeStatusUpdates(player)) {
+      if (!player.equals(avoid) && VanishPerms.canSeeStatusUpdates(player)) {
         player.sendMessage(message);
       }
     }
@@ -192,14 +191,12 @@ public final class VanishPlugin extends JavaPlugin implements Listener {
 
   @Override
   public void onDisable() {
-    this.setInstance(null);
     Debuggle.nah();
     for (final Player player : VanishPlugin.this.getServer().getOnlinePlayers()) {
-      if (player != null) {
-        if (this.manager.isVanished(player)) {
-          player.sendMessage(
-              ChatColor.DARK_AQUA + "[Vanish] You have been forced visible by a reload.");
-        }
+      if (this.manager.isVanished(player)) {
+        player.sendMessage(
+            ChatColor.DARK_AQUA + "[Vanish] You have been forced visible by a reload.");
+
       }
     }
     this.hookManager.onDisable();
@@ -207,49 +204,12 @@ public final class VanishPlugin extends JavaPlugin implements Listener {
     this.getLogger().info(this.getCurrentVersion() + " unloaded.");
   }
 
-  @SuppressWarnings("deprecation")
   @Override
   public void onEnable() {
-    this.setInstance(this);
-
-    // Thanks, PaperLib
-    // https://github.com/PaperMC/PaperLib
-    try {
-      Class.forName("com.destroystokyo.paper.PaperConfig");
-      this.getServer().getPluginManager().registerEvents(new ListenPaper(this), this);
-      this.paper = true;
-
-      this.getServer().getAsyncScheduler().runDelayed(this, (ignored) -> {
-        if (AsyncPlayerChatEvent.getHandlerList().getRegisteredListeners().length == 1) {
-          AsyncPlayerChatEvent.getHandlerList().unregister((Plugin) VanishPlugin.this);
-        }
-      }, 1, TimeUnit.MILLISECONDS);
-
-    } catch (ClassNotFoundException ignored) {
-      final String benefitsProperty = "paperlib.shown-benefits";
-      this.getLogger().warning("====================================================");
-      this.getLogger().warning(" VanishNoPacket works better if you use Paper ");
-      this.getLogger().warning(" as your server software. ");
-      if (System.getProperty(benefitsProperty) == null) {
-        System.setProperty(benefitsProperty, "1");
-        this.getLogger().warning("  ");
-        this.getLogger().warning(" Paper offers significant performance improvements,");
-        this.getLogger().warning(" bug fixes, security enhancements and optional");
-        this.getLogger().warning(" features for server owners to enhance their server.");
-        this.getLogger().warning("  ");
-        this.getLogger().warning(" Paper includes Timings v2, which is significantly");
-        this.getLogger().warning(" better at diagnosing lag problems over v1.");
-        this.getLogger().warning("  ");
-        this.getLogger().warning(" All of your plugins should still work, and the");
-        this.getLogger().warning(" Paper community will gladly help you fix any issues.");
-        this.getLogger().warning("  ");
-        this.getLogger().warning(" Join the Paper Community @ https://papermc.io");
-      }
-      this.getLogger().warning("====================================================");
-    }
+    this.paper = true;
+    this.getServer().getPluginManager().registerEvents(new ListenPaper(this), this);
 
     final File check = new File(this.getDataFolder(), "config.yml");
-    boolean firstTimeStarting = false;
     if (!check.exists()) {
       this.saveDefaultConfig();
       this.reloadConfig();
@@ -274,8 +234,6 @@ public final class VanishPlugin extends JavaPlugin implements Listener {
       this.hookManager.getHook(HookType.squaremap).onEnable();
     }
 
-    final VanishPlugin self = this;
-
     this.manager = new VanishManager(this);
 
     for (final Player player : this.getServer().getOnlinePlayers()) {
@@ -283,7 +241,7 @@ public final class VanishPlugin extends JavaPlugin implements Listener {
           new VanishCheck(this.manager, player.getName())));
     }
 
-    this.getCommand("vanish").setExecutor(new VanishCommand(this));
+    new VanishCommand(this);
     this.getServer().getPluginManager().registerEvents(this, this);
     this.getServer().getPluginManager().registerEvents(new ListenEntity(this), this);
     this.getServer().getPluginManager().registerEvents(new ListenPlayerMessages(this), this);
@@ -297,7 +255,8 @@ public final class VanishPlugin extends JavaPlugin implements Listener {
   }
 
   @EventHandler
-  public void onPluginEnable(PluginEnableEvent event) {
+  @SuppressWarnings("unused")
+  public void onPluginEnable(@NotNull PluginEnableEvent event) {
     if (event.getPlugin().getName().equalsIgnoreCase("DiscordSRV") && this.getConfig()
         .getBoolean("hooks.discordsrv", false)) {
       this.hookManager.getHook(HookType.DiscordSRV).onEnable();
@@ -319,10 +278,5 @@ public final class VanishPlugin extends JavaPlugin implements Listener {
    */
   public boolean isPaper() {
     return this.paper;
-  }
-
-  @SuppressWarnings("deprecation")
-  private void setInstance(@Nullable VanishPlugin plugin) {
-    org.kitteh.vanish.staticaccess.VanishNoPacket.setInstance(plugin);
   }
 }
