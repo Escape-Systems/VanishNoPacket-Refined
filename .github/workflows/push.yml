@@ -46,3 +46,7 @@ jobs:
           gh release create --draft "v$version+$sha_short" --title "$version: $sha_short"
           gh release upload "v$version+$sha_short" $(ls build/libs/VanishNoPacket-*.jar)
           gh release edit "v$version+$sha_short" --draft=false
+      - name: Publish to Hangar
+        env:
+          HANGAR_API_TOKEN: ${{ secrets.HANGAR_API_TOKEN }}
+        run: ./gradlew build publishPluginPublicationToHangar --stacktrace
