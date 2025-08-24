@@ -1,3 +1,4 @@
+import io.papermc.hangarpublishplugin.HangarPublishTask
 import io.papermc.hangarpublishplugin.model.Platforms
 import xyz.jpenilla.resourcefactory.paper.PaperPluginYaml
 
@@ -75,8 +76,8 @@ hangarPublish {
         channel.set("Snapshot")
         id.set("VanishNoPacket-Refined")
         apiKey.set(System.getenv("HANGAR_API_TOKEN"))
-
         platforms {
+
             register(Platforms.PAPER) {
                 jar.set(tasks.shadowJar.flatMap { it.archiveFile })
                 val versions: List<String> =
@@ -101,6 +102,11 @@ hangarPublish {
             }
         }
     }
+}
+
+tasks.withType(HangarPublishTask::class).configureEach {
+    dependsOn(tasks.named("jar"))
+    dependsOn(tasks.named("shadowJar"))
 }
 
 paperPluginYaml {
