@@ -77,7 +77,6 @@ hangarPublish {
         id.set("VanishNoPacket-Refined")
         apiKey.set(System.getenv("HANGAR_API_TOKEN"))
         platforms {
-
             register(Platforms.PAPER) {
                 jar.set(tasks.shadowJar.flatMap { it.archiveFile })
                 val versions: List<String> =
@@ -97,7 +96,9 @@ hangarPublish {
                     hangar("squaremap") {
                         required.set(false)
                     }
-                    url("LuckPerms", "https://luckperms.net/download")
+                    url("LuckPerms", "https://luckperms.net/download"){
+                        required.set(false)
+                    }
                 }
             }
         }
