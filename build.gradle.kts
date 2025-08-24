@@ -28,7 +28,7 @@ repositories {
 dependencies {
 
     testImplementation("junit:junit:4.13.2")
-    paperweight.paperDevBundle("1.21.8-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("1.20.6-R0.1-SNAPSHOT")
     implementation("net.essentialsx:EssentialsX:2.21.1") {
         exclude("org.spigotmc")
     }
@@ -70,7 +70,7 @@ paperPluginYaml {
     main = "org.kitteh.vanish.VanishPlugin"
     authors.add("Matt \"MBax\" Baxter")
     authors.add("Lexie \"Tech\" Malina")
-    apiVersion = "1.21.4"
+    apiVersion = "1.20.6"
     version = project.version.toString()
     description = "Vanish for the high speed admin"
     foliaSupported = true
