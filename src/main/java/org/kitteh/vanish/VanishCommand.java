@@ -54,6 +54,7 @@ public final class VanishCommand {
     registerCommands();
   }
 
+  @SuppressWarnings("UnstableApiUsage")
   private void registerCommands() {
     plugin.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commandManager -> {
       final Commands commands = commandManager.registrar();
@@ -95,12 +96,12 @@ public final class VanishCommand {
             return VanishPerms.canList(executor);
           }).executes(ctx -> {
             Component list = Component.empty();
-            for (final Player player : this.plugin.getServer().getOnlinePlayers()) {
+            for (final String player : this.plugin.getManager().getVanishedPlayers()) {
               if (list.hasStyling()) {
                 list = list.append(Component.text(", ", NamedTextColor.DARK_AQUA))
-                    .append(Component.text(player.getName(), NamedTextColor.AQUA));
+                    .append(Component.text(player, NamedTextColor.AQUA));
               } else {
-                list = Component.text(player.getName(), NamedTextColor.AQUA);
+                list = Component.text(player, NamedTextColor.AQUA);
               }
             }
 
@@ -193,6 +194,7 @@ public final class VanishCommand {
     });
   }
 
+  @SuppressWarnings("UnstableApiUsage")
   private int fakeQuit(CommandContext<CommandSourceStack> ctx, boolean force) {
     Player player = (Player) ctx.getSource().getExecutor();
     assert player != null;
@@ -206,6 +208,7 @@ public final class VanishCommand {
     return SINGLE_SUCCESS;
   }
 
+  @SuppressWarnings("UnstableApiUsage")
   private int fakeJoin(CommandContext<CommandSourceStack> ctx, boolean force) {
     Player player = (Player) ctx.getSource().getExecutor();
     assert player != null;
