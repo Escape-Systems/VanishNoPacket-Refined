@@ -2,21 +2,26 @@ import io.papermc.hangarpublishplugin.HangarPublishTask
 import io.papermc.hangarpublishplugin.model.Platforms
 import xyz.jpenilla.resourcefactory.paper.PaperPluginYaml
 
-group = "org.kitteh"
-version = "3.22-SNAPSHOT"
-description = "VanishNoPacket-Refined"
+
 
 
 plugins {
     `java-library`
     `maven-publish`
     idea
+    id("com.palantir.git-version") version "4.1.0"
     id("io.papermc.paperweight.userdev") version "2.0.0-beta.17"
     id("xyz.jpenilla.run-paper") version "2.3.1"
     id("xyz.jpenilla.resource-factory-paper-convention") version "1.3.0"
     id("com.gradleup.shadow") version "9.0.0-rc1"
     id("io.papermc.hangar-publish-plugin") version "0.1.2"
 }
+
+val versionDetails: groovy.lang.Closure<com.palantir.gradle.gitversion.VersionDetails> by extra
+val details = versionDetails()
+group = "org.kitteh"
+version = "3.22-SNAPSHOT" + '+' + details.gitHash
+description = "VanishNoPacket-Refined"
 
 repositories {
     mavenLocal()

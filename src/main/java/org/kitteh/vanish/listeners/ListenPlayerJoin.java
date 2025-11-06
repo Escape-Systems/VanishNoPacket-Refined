@@ -17,6 +17,8 @@
  */
 package org.kitteh.vanish.listeners;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -30,49 +32,50 @@ import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
 
 public final class ListenPlayerJoin implements Listener {
-    private final VanishPlugin plugin;
 
-    public ListenPlayerJoin(@NonNull VanishPlugin instance) {
-        this.plugin = instance;
-    }
+  private final VanishPlugin plugin;
 
-    @EventHandler(priority = EventPriority.LOW)
-    public void onPlayerJoinEarly(@NonNull PlayerJoinEvent event) {
-        event.getPlayer().setMetadata("vanished", new LazyMetadataValue(this.plugin, CacheStrategy.NEVER_CACHE, new VanishCheck(this.plugin.getManager(), event.getPlayer().getName())));
-        this.plugin.getManager().resetSeeing(event.getPlayer());
-        if (VanishPerms.joinVanished(event.getPlayer())) {
-            this.plugin.getManager().toggleVanishQuiet(event.getPlayer(), false);
-            this.plugin.hooksVanish(event.getPlayer());
-        }
-        this.plugin.hooksJoin(event.getPlayer());
-    }
+  public ListenPlayerJoin(@NonNull VanishPlugin instance) {
+    this.plugin = instance;
+  }
 
-    @EventHandler(priority = EventPriority.MONITOR  )
-    public void onPlayerJoinLate(@NonNull PlayerJoinEvent event) {
-        final StringBuilder statusUpdate = new StringBuilder();
-        if (VanishPerms.joinVanished(event.getPlayer())) {
-            String message = ChatColor.DARK_AQUA + "You have joined vanished.";
-            if (VanishPerms.canVanish(event.getPlayer())) {
-                message += " To appear: /vanish";
-            }
-            event.getPlayer().sendMessage(message);
-            statusUpdate.append("vanished");
-        }
-        if (VanishPerms.joinWithoutAnnounce(event.getPlayer())) {
-            this.plugin.getManager().getAnnounceManipulator().addToDelayedAnnounce(event.getPlayer().getName());
-            if (this.plugin.isPaper()) {
-                event.joinMessage(null);
-            } else {
-                //noinspection deprecation
-                event.setJoinMessage(null);
-            }
-            if (statusUpdate.length() != 0) {
-                statusUpdate.append(" and ");
-            }
-            statusUpdate.append("silently");
-        }
-        if (statusUpdate.length() != 0) {
-            this.plugin.messageStatusUpdate(ChatColor.DARK_AQUA + event.getPlayer().getName() + " has joined " + statusUpdate.toString());
-        }
+  @EventHandler(priority = EventPriority.LOW)
+  public void onPlayerJoinEarly(@NonNull PlayerJoinEvent event) {
+    event.getPlayer().setMetadata("vanished",
+        new LazyMetadataValue(this.plugin, CacheStrategy.NEVER_CACHE,
+            new VanishCheck(this.plugin.getManager(), event.getPlayer().getName())));
+    this.plugin.getManager().resetSeeing(event.getPlayer());
+    if (VanishPerms.joinVanished(event.getPlayer())) {
+      this.plugin.getManager().toggleVanishQuiet(event.getPlayer(), false);
+      this.plugin.hooksVanish(event.getPlayer());
     }
+    this.plugin.hooksJoin(event.getPlayer());
+  }
+
+  @EventHandler(priority = EventPriority.MONITOR)
+  public void onPlayerJoinLate(@NonNull PlayerJoinEvent event) {
+    final StringBuilder statusUpdate = new StringBuilder();
+    if (VanishPerms.joinVanished(event.getPlayer())) {
+      Component message = Component.text("You have joined vanished.", NamedTextColor.DARK_AQUA);
+      if (VanishPerms.canVanish(event.getPlayer())) {
+        message = message.append(Component.text(" To appear: /vanish",  NamedTextColor.DARK_AQUA));
+      }
+      event.getPlayer().sendMessage(message);
+      statusUpdate.append("vanished");
+    }
+    if (VanishPerms.joinWithoutAnnounce(event.getPlayer())) {
+      this.plugin.getManager().getAnnounceManipulator()
+          .addToDelayedAnnounce(event.getPlayer().getName());
+      event.joinMessage(null);
+
+      if (!statusUpdate.isEmpty()) {
+        statusUpdate.append(" and ");
+      }
+      statusUpdate.append("silently");
+    }
+    if (!statusUpdate.isEmpty()) {
+      this.plugin.messageStatusUpdate(
+          ChatColor.DARK_AQUA + event.getPlayer().getName() + " has joined " + statusUpdate);
+    }
+  }
 }
