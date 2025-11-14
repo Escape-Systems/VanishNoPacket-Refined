@@ -5,6 +5,7 @@ import xyz.jpenilla.resourcefactory.paper.PaperPluginYaml
 
 
 
+
 plugins {
     `java-library`
     `maven-publish`
@@ -45,9 +46,11 @@ dependencies {
     }
     implementation("me.clip:placeholderapi:2.11.6") {
         exclude("me.clip.placeholderapi.libs.kyori")
+        exclude("net.kyori")
     }
     compileOnly("com.discordsrv:discordsrv:1.29.0") {
         exclude("github.scarsz.discordsrv.dependencies.kyori")
+        exclude("net.kyori")
     }
     compileOnly("xyz.jpenilla:squaremap-api:1.3.7")
 }
@@ -69,6 +72,8 @@ tasks.shadowJar {
 
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
+    options.isDeprecation = true
+
 }
 
 tasks.withType<Javadoc> {
@@ -101,7 +106,7 @@ hangarPublish {
                     hangar("squaremap") {
                         required.set(false)
                     }
-                    url("LuckPerms", "https://luckperms.net/download"){
+                    url("LuckPerms", "https://luckperms.net/download") {
                         required.set(false)
                     }
                 }

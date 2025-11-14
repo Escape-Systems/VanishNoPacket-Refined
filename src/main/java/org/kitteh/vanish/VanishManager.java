@@ -25,7 +25,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -225,21 +226,21 @@ public final class VanishManager {
   public void toggleVanish(@NonNull Player togglingPlayer) {
     this.toggleVanishQuiet(togglingPlayer);
     final String vanishingPlayerName = togglingPlayer.getName();
-    final String messageBit;
-    final String base = ChatColor.YELLOW + vanishingPlayerName + " has ";
+    final Component messageBit;
+    final Component base = Component.text(vanishingPlayerName + " has ", NamedTextColor.YELLOW);
     if (this.isVanished(togglingPlayer)) {
       Debuggle.log("LoudVanishToggle Vanishing " + togglingPlayer.getName());
       this.plugin.hooksVanish(togglingPlayer);
-      messageBit = "vanished. Poof.";
+      messageBit = Component.text("vanished. Poof.");
 
     } else {
       Debuggle.log("LoudVanishToggle Revealing " + togglingPlayer.getName());
       this.plugin.hooksUnvanish(togglingPlayer);
-      messageBit = "become visible.";
+      messageBit = Component.text("become visible.");
       this.announceManipulator.vanishToggled(togglingPlayer);
     }
-    final String message = base + messageBit;
-    togglingPlayer.sendMessage(ChatColor.DARK_AQUA + "You have " + messageBit);
+    final Component message = base.append(messageBit);
+    togglingPlayer.sendMessage(Component.text("You have " + messageBit, NamedTextColor.DARK_AQUA));
     this.plugin.messageStatusUpdate(message, togglingPlayer);
   }
 

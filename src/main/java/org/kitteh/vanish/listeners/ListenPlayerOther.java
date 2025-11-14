@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -115,7 +116,7 @@ public final class ListenPlayerOther implements Listener {
       }
       inventory.setContents(container.getInventory().getContents());
       this.plugin.chestFakeOpen(player.getName());
-      player.sendMessage(ChatColor.AQUA + "[VNP] Opening chest silently. Can not edit.");
+      player.sendMessage(Component.text( "[VNP] Opening chest silently. Can not edit.", NamedTextColor.AQUA));
       player.openInventory(inventory);
       event.setCancelled(true);
     } else if (this.plugin.getManager().isVanished(player) && VanishPerms.canNotInteract(player)) {
@@ -127,6 +128,7 @@ public final class ListenPlayerOther implements Listener {
     }
   }
 
+  @SuppressWarnings("unused")
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onPlayerPickupItem(@NonNull EntityPickupItemEvent event) {
     if (event.getEntity() instanceof Player player && this.plugin.getManager().isVanished(player)
@@ -135,6 +137,7 @@ public final class ListenPlayerOther implements Listener {
     }
   }
 
+  @SuppressWarnings("unused")
   @EventHandler(ignoreCancelled = true)
   public void onPickupArrow(@NonNull PlayerPickupArrowEvent event) {
     if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotPickUp(
@@ -143,12 +146,14 @@ public final class ListenPlayerOther implements Listener {
     }
   }
 
+  @SuppressWarnings("unused")
   @EventHandler
   public void onPlayerQuit(@NonNull PlayerQuitEvent event) {
     final Player player = event.getPlayer();
     if (this.plugin.getManager().isVanished(player)) {
       this.plugin.messageStatusUpdate(
-          ChatColor.DARK_AQUA + event.getPlayer().getName() + " has quit vanished");
+          Component.text(event.getPlayer().getName() + " has quit vanished",
+              NamedTextColor.DARK_AQUA));
     }
     this.plugin.getManager().playerQuit(player);
     this.plugin.hooksQuit(player);
@@ -161,6 +166,7 @@ public final class ListenPlayerOther implements Listener {
     this.playersAndLastTimeSneaked.remove(player.getUniqueId());
   }
 
+  @SuppressWarnings("unused")
   @EventHandler(ignoreCancelled = true)
   public void onPlayerInteractEntity(@NonNull PlayerInteractEntityEvent event) {
     if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotInteract(
@@ -169,6 +175,7 @@ public final class ListenPlayerOther implements Listener {
     }
   }
 
+  @SuppressWarnings("unused")
   @EventHandler(ignoreCancelled = true)
   public void onShear(@NonNull PlayerShearEntityEvent event) {
     if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotInteract(
@@ -177,6 +184,7 @@ public final class ListenPlayerOther implements Listener {
     }
   }
 
+  @SuppressWarnings("unused")
   @EventHandler(priority = EventPriority.MONITOR)
   public void onWorldChange(@NonNull PlayerChangedWorldEvent event) {
     if (Settings.getWorldChangeCheck()) {
@@ -184,6 +192,7 @@ public final class ListenPlayerOther implements Listener {
     }
   }
 
+  @SuppressWarnings("unused")
   @EventHandler(ignoreCancelled = true)
   public void onRaidTrigger(@NonNull RaidTriggerEvent event) {
     if (this.plugin.getManager().isVanished(event.getPlayer())) {
@@ -191,6 +200,7 @@ public final class ListenPlayerOther implements Listener {
     }
   }
 
+  @SuppressWarnings("unused")
   @EventHandler(ignoreCancelled = true)
   public void onEntityBlockForm(@NonNull EntityBlockFormEvent event) {
     if ((event.getEntity() instanceof Player player) && this.plugin.getManager()
@@ -199,6 +209,7 @@ public final class ListenPlayerOther implements Listener {
     }
   }
 
+  @SuppressWarnings("unused")
   @EventHandler(priority = EventPriority.LOW)
   public void onPlayerShift(@NonNull PlayerToggleSneakEvent event) {
     if (!event.isSneaking() || !Settings.isDoubleSneakDuringVanishSwitchesGameMode()

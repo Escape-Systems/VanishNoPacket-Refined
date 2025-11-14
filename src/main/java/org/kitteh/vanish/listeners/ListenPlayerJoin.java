@@ -52,6 +52,7 @@ public final class ListenPlayerJoin implements Listener {
     this.plugin.hooksJoin(event.getPlayer());
   }
 
+  @SuppressWarnings("unused")
   @EventHandler(priority = EventPriority.MONITOR)
   public void onPlayerJoinLate(@NonNull PlayerJoinEvent event) {
     final StringBuilder statusUpdate = new StringBuilder();
@@ -75,7 +76,8 @@ public final class ListenPlayerJoin implements Listener {
     }
     if (!statusUpdate.isEmpty()) {
       this.plugin.messageStatusUpdate(
-          ChatColor.DARK_AQUA + event.getPlayer().getName() + " has joined " + statusUpdate);
+
+         Component.text(event.getPlayer().getName() + " has joined " + statusUpdate,  NamedTextColor.DARK_AQUA));
     }
   }
 }
