@@ -231,16 +231,17 @@ public final class VanishManager {
     if (this.isVanished(togglingPlayer)) {
       Debuggle.log("LoudVanishToggle Vanishing " + togglingPlayer.getName());
       this.plugin.hooksVanish(togglingPlayer);
-      messageBit = Component.text("vanished. Poof.");
+      messageBit = Component.text("vanished. Poof.", NamedTextColor.DARK_AQUA);
 
     } else {
       Debuggle.log("LoudVanishToggle Revealing " + togglingPlayer.getName());
       this.plugin.hooksUnvanish(togglingPlayer);
-      messageBit = Component.text("become visible.");
+      messageBit = Component.text("become visible.", NamedTextColor.DARK_AQUA);
       this.announceManipulator.vanishToggled(togglingPlayer);
     }
     final Component message = base.append(messageBit);
-    togglingPlayer.sendMessage(Component.text("You have " + messageBit, NamedTextColor.DARK_AQUA));
+    togglingPlayer.sendMessage(
+        Component.text("You have ", NamedTextColor.DARK_AQUA).append(messageBit));
     this.plugin.messageStatusUpdate(message, togglingPlayer);
   }
 

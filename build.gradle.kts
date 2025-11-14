@@ -37,7 +37,7 @@ repositories {
 dependencies {
 
     testImplementation("junit:junit:4.13.2")
-    paperweight.paperDevBundle("1.20.6-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("1.21.10-R0.1-SNAPSHOT")
     implementation("net.essentialsx:EssentialsX:2.21.1") {
         exclude("org.spigotmc")
     }
