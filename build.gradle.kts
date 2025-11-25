@@ -2,10 +2,6 @@ import io.papermc.hangarpublishplugin.HangarPublishTask
 import io.papermc.hangarpublishplugin.model.Platforms
 import xyz.jpenilla.resourcefactory.paper.PaperPluginYaml
 
-
-
-
-
 plugins {
     `java-library`
     `maven-publish`
@@ -36,7 +32,11 @@ repositories {
 
 dependencies {
 
-    testImplementation("junit:junit:4.13.2")
+    testImplementation(platform("org.junit:junit-bom:6.0.1"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
     paperweight.paperDevBundle("1.21.10-R0.1-SNAPSHOT")
     implementation("net.essentialsx:EssentialsX:2.21.1") {
         exclude("org.spigotmc")
@@ -44,7 +44,10 @@ dependencies {
     compileOnly("com.github.milkbowl:vaultapi:1.7") {
         exclude("org.bukkit")
     }
+
     compileOnly("net.luckperms:api:5.5")
+    testImplementation("net.luckperms:api:5.5")
+
     implementation("me.clip:placeholderapi:2.11.6") {
         exclude("me.clip.placeholderapi.libs.kyori")
         exclude("net.kyori")
@@ -84,6 +87,13 @@ tasks {
         minecraftVersion("1.21.8")
         downloadPlugins {
             url("https://download.luckperms.net/1609/bukkit/loader/LuckPerms-Bukkit-5.5.20.jar")
+        }
+    }
+
+    test {
+        useJUnitPlatform()
+        testLogging {
+            events("passed", "skipped", "failed")
         }
     }
 }

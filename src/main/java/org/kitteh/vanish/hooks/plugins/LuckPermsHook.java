@@ -5,8 +5,6 @@ import net.luckperms.api.context.ContextCalculator;
 import net.luckperms.api.context.ContextConsumer;
 import net.luckperms.api.context.ContextSet;
 import net.luckperms.api.context.ImmutableContextSet;
-import net.luckperms.api.model.user.User;
-import net.luckperms.api.model.user.UserManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -17,9 +15,8 @@ import org.kitteh.vanish.hooks.Hook;
 public class LuckPermsHook extends Hook {
 
   boolean enabled = false;
-  private UserManager userManager;
 
-  public class VanishContextCalculator implements ContextCalculator<Player> {
+  private static class VanishContextCalculator implements ContextCalculator<Player> {
 
     private final VanishPlugin plugin;
 
@@ -54,11 +51,8 @@ public class LuckPermsHook extends Hook {
     }
 
     LuckPerms luckperms = provider.getProvider();
-    this.userManager = luckperms.getUserManager();
     this.plugin.getLogger().info("Now hooking into Luckperms");
     this.enabled = true;
     luckperms.getContextManager().registerCalculator(new VanishContextCalculator(this.plugin));
-
-
   }
 }
