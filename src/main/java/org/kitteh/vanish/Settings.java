@@ -17,115 +17,123 @@
  */
 package org.kitteh.vanish;
 
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 public final class Settings {
-    private static boolean enablePermTest;
-    private static String fakeQuit;
-    private static String fakeJoin;
-    private static boolean autoFakeJoinSilent;
-    private static boolean worldChangeCheck;
-    private static int lightningEffectCount;
-    private static boolean doubleSneakDuringVanishSwitchesGameMode = false;
-    private static int doubleSneakDuringVanishSwitchesGameModeTimeBetweenSneaksInMS = 500;
-    private static String doubleSneakDuringVanishSwitchesGameModeMessage = "&aGameMode changed!";
 
-    private static final int confVersion = 9; // Tracking config version
+  private static boolean enablePermTest;
+  private static String fakeQuit;
+  private static String fakeJoin;
+  private static boolean autoFakeJoinSilent;
+  private static boolean worldChangeCheck;
+  private static int lightningEffectCount;
+  private static boolean doubleSneakDuringVanishSwitchesGameMode = false;
+  private static int doubleSneakDuringVanishSwitchesGameModeTimeBetweenSneaksInMS = 500;
+  private static String doubleSneakDuringVanishSwitchesGameModeMessage = "&aGameMode changed!";
 
-    public static boolean getAutoFakeJoinSilent() {
-        return Settings.autoFakeJoinSilent;
+  private static final int confVersion = 10; // Tracking config version
+
+  public static boolean getAutoFakeJoinSilent() {
+    return Settings.autoFakeJoinSilent;
+  }
+
+  public static boolean getEnablePermTest() {
+    return Settings.enablePermTest;
+  }
+
+  public static String getFakeJoin() {
+    return Settings.fakeJoin;
+  }
+
+  public static String getFakeQuit() {
+    return Settings.fakeQuit;
+  }
+
+  public static int getLightningCount() {
+    return Settings.lightningEffectCount;
+  }
+
+  public static boolean getWorldChangeCheck() {
+    return Settings.worldChangeCheck;
+  }
+
+  public static boolean isDoubleSneakDuringVanishSwitchesGameMode() {
+    return Settings.doubleSneakDuringVanishSwitchesGameMode;
+  }
+
+  public static int getDoubleSneakDuringVanishSwitchesGameModeTimeBetweenSneaksInMS() {
+    return Settings.doubleSneakDuringVanishSwitchesGameModeTimeBetweenSneaksInMS;
+  }
+
+  public static String getDoubleSneakDuringVanishSwitchesGameModeMessage() {
+    return Settings.doubleSneakDuringVanishSwitchesGameModeMessage;
+  }
+
+  static void freshStart(@NonNull VanishPlugin plugin) {
+    final FileConfiguration config = plugin.getConfig();
+    config.options().copyDefaults(true);
+    final int ver = config.getInt("configVersionDoNotTouch.SeriouslyThisWillEraseYourConfig", 0);
+    if (ver != Settings.confVersion) {
+      plugin.getLogger()
+          .info("Attempting to update your configuration. Check to make sure it's ok");
+
+      switch (ver) {
+        case 0:
+          config.set("spoutcraft.enable", null);
+          config.set("spoutcraft", null);
+        case 1:
+          final boolean permtest = config.getBoolean("permtest.enable", false);
+          config.set("permtest.enable", null);
+          config.set("permtest", permtest);
+          config.set("enableColoration", null);
+          config.set("enableTabControl", null);
+          config.set("updates.check", null);
+        case 2:
+        case 3:
+          config.set("effects.lightning.count", 30);
+        case 4:
+        case 5:
+          config.set("hooks.JSONAPI", null);
+          config.set("hooks.spoutcraft", null);
+          config.set("colornametags", null);
+          config.set("checkupdates", null);
+        case 6:
+          config.set("hooks.dynmap", false);
+        case 7:
+          config.set("hooks.discordsrv", false);
+        case 8:
+          config.set("hooks.squaremap", false);
+        case 9:
+          config.set("hooks.luckperms", false);
+          config.set("hooks.dynmap", null);
+          break;
+        default:
+          plugin.getLogger().severe(
+              "Frankly I don' understand how you got here. Make a bug report. https://github.com/Escape-Systems/VanishNoPacket-Refined/issues/new");
+          break;
+      }
+
+      config.set("configVersionDoNotTouch.SeriouslyThisWillEraseYourConfig", Settings.confVersion);
+      plugin.saveConfig();
     }
-
-    public static boolean getEnablePermTest() {
-        return Settings.enablePermTest;
+    Settings.enablePermTest = config.getBoolean("permtest", false);
+    Settings.autoFakeJoinSilent = config.getBoolean("fakeannounce.automaticforsilentjoin", false);
+    Settings.worldChangeCheck = config.getBoolean("permissionsupdates.checkonworldchange", false);
+    Settings.doubleSneakDuringVanishSwitchesGameMode = config.getBoolean(
+        "double-sneak-during-vanish-switches-gamemode.enabled", false);
+    Settings.doubleSneakDuringVanishSwitchesGameModeTimeBetweenSneaksInMS = config.getInt(
+        "double-sneak-during-vanish-switches-gamemode.max-ms-time-between-sneaks", 500);
+    Settings.doubleSneakDuringVanishSwitchesGameModeMessage = config.getString(
+        "double-sneak-during-vanish-switches-gamemode.message", "&aGameMode changed!");
+    Settings.lightningEffectCount = config.getInt("effects.lightning.count", 30);
+    if (Settings.lightningEffectCount < 1) {
+      Settings.lightningEffectCount = 1;
     }
-
-    public static String getFakeJoin() {
-        return Settings.fakeJoin;
+    if (config.getBoolean("debug", false)) {
+      Debuggle.itsGoTime(plugin);
+    } else {
+      Debuggle.nah();
     }
-
-    public static String getFakeQuit() {
-        return Settings.fakeQuit;
-    }
-
-    public static int getLightningCount() {
-        return Settings.lightningEffectCount;
-    }
-
-    public static boolean getWorldChangeCheck() {
-        return Settings.worldChangeCheck;
-    }
-
-    public static boolean isDoubleSneakDuringVanishSwitchesGameMode() {
-        return Settings.doubleSneakDuringVanishSwitchesGameMode;
-    }
-
-    public static int getDoubleSneakDuringVanishSwitchesGameModeTimeBetweenSneaksInMS() {
-        return Settings.doubleSneakDuringVanishSwitchesGameModeTimeBetweenSneaksInMS;
-    }
-
-    public static String getDoubleSneakDuringVanishSwitchesGameModeMessage() {
-        return Settings.doubleSneakDuringVanishSwitchesGameModeMessage;
-    }
-
-    static void freshStart(@NonNull VanishPlugin plugin) {
-        final FileConfiguration config = plugin.getConfig();
-        config.options().copyDefaults(true);
-        final int ver = config.getInt("configVersionDoNotTouch.SeriouslyThisWillEraseYourConfig", 0);
-        if (ver != Settings.confVersion) {
-            plugin.getLogger().info("Attempting to update your configuration. Check to make sure it's ok");
-            if (ver < 1) {
-                config.set("spoutcraft.enable", null);
-                config.set("spoutcraft", null);
-            }
-            if ((ver <= 1) || config.contains("permtest.enable")) {
-                final boolean permtest = config.getBoolean("permtest.enable", false);
-                config.set("permtest.enable", null);
-                config.set("permtest", permtest);
-                config.set("enableColoration", null);
-                config.set("enableTabControl", null);
-                config.set("updates.check", null);
-            }
-            if ((ver <= 3)) {
-                config.set("effects.lightning.count", 30);
-            }
-            if (ver <= 5) {
-                config.set("hooks.JSONAPI", null);
-                config.set("hooks.spoutcraft", null);
-                config.set("colornametags", null);
-                config.set("checkupdates", null);
-            }
-            if (ver <= 6) {
-                config.set("hooks.dynmap", false);
-            }
-            if (ver <= 7) {
-                config.set("hooks.discordsrv", false);
-            }
-            if (ver <= 8) {
-                config.set("hooks.squaremap", false);
-                config.set("double-sneak-during-vanish-switches-gamemode.enabled", false);
-                config.set("double-sneak-during-vanish-switches-gamemode.max-ms-time-between-sneaks", 500);
-                config.set("double-sneak-during-vanish-switches-gamemode.message", "&aGameMode changed!");
-            }
-            config.set("configVersionDoNotTouch.SeriouslyThisWillEraseYourConfig", Settings.confVersion);
-            plugin.saveConfig();
-        }
-        Settings.enablePermTest = config.getBoolean("permtest", false);
-        Settings.autoFakeJoinSilent = config.getBoolean("fakeannounce.automaticforsilentjoin", false);
-        Settings.worldChangeCheck = config.getBoolean("permissionsupdates.checkonworldchange", false);
-        Settings.doubleSneakDuringVanishSwitchesGameMode = config.getBoolean("double-sneak-during-vanish-switches-gamemode.enabled", false);
-        Settings.doubleSneakDuringVanishSwitchesGameModeTimeBetweenSneaksInMS = config.getInt("double-sneak-during-vanish-switches-gamemode.max-ms-time-between-sneaks", 500);
-        Settings.doubleSneakDuringVanishSwitchesGameModeMessage = config.getString("double-sneak-during-vanish-switches-gamemode.message", "&aGameMode changed!");
-        Settings.lightningEffectCount = config.getInt("effects.lightning.count", 30);
-        if (Settings.lightningEffectCount < 1) {
-            Settings.lightningEffectCount = 1;
-        }
-        if (config.getBoolean("debug", false)) {
-            Debuggle.itsGoTime(plugin);
-        } else {
-            Debuggle.nah();
-        }
-    }
+  }
 }

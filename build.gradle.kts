@@ -44,6 +44,7 @@ dependencies {
     compileOnly("com.github.milkbowl:vaultapi:1.7") {
         exclude("org.bukkit")
     }
+    compileOnly("net.luckperms:api:5.5")
     implementation("me.clip:placeholderapi:2.11.6") {
         exclude("me.clip.placeholderapi.libs.kyori")
         exclude("net.kyori")
@@ -65,20 +66,28 @@ publishing {
     }
 }
 
-tasks.shadowJar {
-    minimize()
-    archiveFileName.set("${project.name}-${project.version}.jar")
+tasks {
+    shadowJar {
+        minimize()
+        archiveFileName.set("${project.name}-${project.version}.jar")
+    }
+
+    withType<JavaCompile> {
+        options.encoding = "UTF-8"
+        options.isDeprecation = true
+    }
+    withType<Javadoc> {
+        options.encoding = "UTF-8"
+    }
+
+    runServer {
+        minecraftVersion("1.21.8")
+        downloadPlugins {
+            url("https://download.luckperms.net/1609/bukkit/loader/LuckPerms-Bukkit-5.5.20.jar")
+        }
+    }
 }
 
-tasks.withType<JavaCompile> {
-    options.encoding = "UTF-8"
-    options.isDeprecation = true
-
-}
-
-tasks.withType<Javadoc> {
-    options.encoding = "UTF-8"
-}
 
 hangarPublish {
     publications.register("plugin") {

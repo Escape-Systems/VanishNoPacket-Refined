@@ -24,6 +24,7 @@ import org.kitteh.vanish.Debuggle;
 import org.kitteh.vanish.VanishPlugin;
 import org.kitteh.vanish.hooks.plugins.DiscordSRVHook;
 import org.kitteh.vanish.hooks.plugins.EssentialsHook;
+import org.kitteh.vanish.hooks.plugins.LuckPermsHook;
 import org.kitteh.vanish.hooks.plugins.SquaremapHook;
 import org.kitteh.vanish.hooks.plugins.VaultHook;
 
@@ -37,7 +38,8 @@ public final class HookManager {
         Essentials(EssentialsHook.class),
         Vault(VaultHook.class),
         DiscordSRV(DiscordSRVHook.class),
-        squaremap(SquaremapHook.class);
+        Squaremap(SquaremapHook.class),
+        LuckPerms(LuckPermsHook.class);
 
         private final Class<? extends Hook> clazz;
 

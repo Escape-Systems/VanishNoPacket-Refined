@@ -27,19 +27,19 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
 
-public final class ListenToYourHeart implements Listener {
+public final class ListenHangingBreak implements Listener {
     private final VanishPlugin plugin;
 
-    public ListenToYourHeart(@NonNull VanishPlugin plugin) {
+    public ListenHangingBreak(@NonNull VanishPlugin plugin) {
         this.plugin = plugin;
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void badReview(@NonNull HangingBreakEvent criticism) {
-        if (criticism instanceof HangingBreakByEntityEvent ev) {
+    public void onHangingBreak(@NonNull HangingBreakEvent event) {
+        if (event instanceof HangingBreakByEntityEvent ev) {
             final Entity critic = ev.getRemover();
-            if (critic instanceof final Player arrogantFool && this.plugin.getManager().isVanished(arrogantFool) && VanishPerms.canNotInteract(arrogantFool)) {
-                criticism.setCancelled(true);
+            if (critic instanceof final Player player && this.plugin.getManager().isVanished(player) && VanishPerms.canNotInteract(player)) {
+                event.setCancelled(true);
             }
         }
     }

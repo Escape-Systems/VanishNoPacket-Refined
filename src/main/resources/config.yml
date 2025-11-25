@@ -11,9 +11,9 @@ fakeannounce:
 
 hooks:
     essentials: false
-    dynmap: false
     discordsrv: false
     squaremap: false
+    luckperms: false
 
 permissionsupdates:
     checkonworldchange: false
@@ -29,5 +29,5 @@ double-sneak-during-vanish-switches-gamemode:
     max-ms-time-between-sneaks: 500
     message: '&aGameMode changed!'
 
-configVersionDoNotTouch: 
-    SeriouslyThisWillEraseYourConfig: 9
+configVersionDoNotTouch:
+    SeriouslyThisWillEraseYourConfig: 10

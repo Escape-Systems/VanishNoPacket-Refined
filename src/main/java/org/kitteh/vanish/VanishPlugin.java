@@ -23,7 +23,6 @@ import java.util.Set;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -43,7 +42,7 @@ import org.kitteh.vanish.listeners.ListenPlayerJoin;
 import org.kitteh.vanish.listeners.ListenPlayerMessages;
 import org.kitteh.vanish.listeners.ListenPlayerOther;
 import org.kitteh.vanish.listeners.ListenServerPing;
-import org.kitteh.vanish.listeners.ListenToYourHeart;
+import org.kitteh.vanish.listeners.ListenHangingBreak;
 
 public final class VanishPlugin extends JavaPlugin implements Listener {
 
@@ -234,7 +233,10 @@ public final class VanishPlugin extends JavaPlugin implements Listener {
       this.hookManager.getHook(HookType.DiscordSRV).onEnable();
     }
     if (this.getConfig().getBoolean("hooks.squaremap", false)) {
-      this.hookManager.getHook(HookType.squaremap).onEnable();
+      this.hookManager.getHook(HookType.Squaremap).onEnable();
+    }
+    if (this.getConfig().getBoolean("hooks.luckperms", false)) {
+      this.hookManager.getHook(HookType.LuckPerms).onEnable();
     }
 
     this.manager = new VanishManager(this);
@@ -250,7 +252,7 @@ public final class VanishPlugin extends JavaPlugin implements Listener {
     this.getServer().getPluginManager().registerEvents(new ListenPlayerMessages(this), this);
     this.getServer().getPluginManager().registerEvents(new ListenPlayerJoin(this), this);
     this.getServer().getPluginManager().registerEvents(new ListenPlayerOther(this), this);
-    this.getServer().getPluginManager().registerEvents(new ListenToYourHeart(this), this);
+    this.getServer().getPluginManager().registerEvents(new ListenHangingBreak(this), this);
     this.getServer().getPluginManager().registerEvents(new ListenInventory(this), this);
     this.getServer().getPluginManager().registerEvents(new ListenServerPing(this.manager), this);
 

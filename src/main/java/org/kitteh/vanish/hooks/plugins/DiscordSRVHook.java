@@ -24,7 +24,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.kitteh.vanish.VanishPlugin;
 import org.kitteh.vanish.hooks.Hook;
 
-public class DiscordSRVHook extends Hook {
+public final class DiscordSRVHook extends Hook {
     private boolean enabled = false;
     private DiscordSRV discordsrv;
 
